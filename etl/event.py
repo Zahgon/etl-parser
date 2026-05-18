@@ -86,8 +86,9 @@ class Event:
     """
     This is a python wrapper around construct struct to access interesting fields
     """
-    def __init__(self, source):
+    def __init__(self, source, start_time):
         self.source = source
+        self.start_time = start_time
 
     def get_process_id(self):
         """
@@ -107,7 +108,7 @@ class Event:
         """
         :return: Timestamp associated with this event
         """
-        return self.source.event_header.timestamp
+        return self.source.event_header.timestamp + self.start_time
 
     def parse_etw(self) -> Etw:
         """

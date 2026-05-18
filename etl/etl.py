@@ -130,7 +130,7 @@ class EtlFile:
         :param observer IEtlFileObserver: observer pattern
         """
         actions = {
-            "EventRecord": lambda obj: observer.on_event_record(Event(obj)),
+            "EventRecord": lambda obj: observer.on_event_record(Event(obj, self.header.get_start_time())),
             "TraceRecord": lambda obj: observer.on_trace_record(Trace(obj)),
             "SystemTraceRecord": lambda obj: observer.on_system_trace(System(obj)),
             "PerfInfoTraceRecord": lambda obj: observer.on_perfinfo_trace(PerfInfo(obj)),

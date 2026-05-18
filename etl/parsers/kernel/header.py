@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from construct import Struct, Int32ul, Int64ul, RepeatUntil, Byte
+from construct import Struct, Int32ul, Int64ul
 
 from etl.parsers.kernel.core import declare, Mof
 from etl.utils import TimeZoneInformation, WString
@@ -42,6 +42,12 @@ class EventTraceHeader(Mof):
         :return: ETW Session name
         """
         return bytearray(self.source.SessionNameString.string[:-2]).decode("utf-16le")
+
+    def get_start_time(self) -> Int64ul:
+        """
+        :return: StartTime of the trace
+        """
+        return self.source.StartTime
 
     def get_log_filename(self) -> str:
         """
@@ -95,3 +101,10 @@ class EventTrace_V0_Header(Mof):
         "SessionNameString" / WString,
         "LogFileNameString" / WString
     )
+
+    def get_start_time(self) -> Int64ul:
+        """
+        :return: StartTime of the trace
+        """
+        return self.source.StartTime
+
