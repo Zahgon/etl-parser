@@ -119,8 +119,10 @@ def log_construct_pattern(xml: Element, pattern: Struct, source: Container):
                 add_attribute(xml, field.name, bytearray(source[field.name].string[:-2]).decode("utf-16le"))
             elif source[field.name].type == "CString":
                 add_attribute(xml, field.name, bytearray(source[field.name].string[:-1]).decode("ascii"))
+            elif source[field.name].type == "Guid":
+                add_attribute(xml, field.name, str(Guid(source[field.name].inner.data1, source[field.name].inner.data2, source[field.name].inner.data3, source[field.name].inner.data4)))
             else:
-                raise InvalidType()
+                raise InvalidType(source[field.name].type)
         elif isinstance(source[field.name], ListContainer):
             add_attribute(xml, field.name, bytearray(source[field.name]).hex())
         elif isinstance(source[field.name],  bytes):
