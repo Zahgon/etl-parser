@@ -23,7 +23,7 @@ class EtlFileLogger(IEtlFileObserver):
     def on_system_trace(self, obj: SystemTraceRecord):
         """ignore this kind of message"""
 
-    def on_perfinfo_trace(self, obj: PerfInfo):
+    def on_perfinfo_trace(self, obj: PerfInfo, boot_time: int):
         """ignore this kind of message"""
 
     def on_trace_record(self, event: Trace):
@@ -45,7 +45,7 @@ class EtlFileLogger(IEtlFileObserver):
         except (EtwVersionNotFound, EventIdNotFound, GuidNotFound):
             """ignore exception"""
 
-    def on_win_trace(self, event: WinTrace):
+    def on_win_trace(self, obj: WinTrace):
         """ignore this kind of message"""
 
 
