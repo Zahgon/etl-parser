@@ -5,7 +5,8 @@ It's directly inspired from :
 :see: https://www.geoffchappell.com/studies/windows/km/ntoskrnl/api/etw/tracelog/wmi_buffer_header.htm
 """
 from abc import ABCMeta, abstractmethod
-from typing import List
+from datetime import datetime
+from typing import List, Any
 
 from construct import Struct, Bytes, CheckError, Aligned, Select, GreedyRange, Container, Computed, RepeatUntil
 
@@ -65,12 +66,13 @@ class IEtlFileObserver(metaclass=ABCMeta):
     Parse sequentially an etl file and commit event when found a particular event
     """
     @abstractmethod
-    def on_event_record(self, event: Event):
+    def on_event_record(self, event: Event, boot_time: int):
         """
         Raise when an event record is parsed
-        Mostly use by ETW and tracelogging
+        Mostly used by ETW and tracelogging
         If you search classic provider you are at the correct place
         :param event: the event record
+        :param boot_time: machine's boot time (as Windows FILETIME) to be used as offset for the events' timestamp.
         """
 
     @abstractmethod
@@ -82,12 +84,13 @@ class IEtlFileObserver(metaclass=ABCMeta):
         """
 
     @abstractmethod
-    def on_perfinfo_trace(self, obj: PerfInfo):
+    def on_perfinfo_trace(self, obj: PerfInfo, boot_time: int):
         """
         Raise when a wmi perfinfo trace is parsed
         Mostly use as mof container
         If you want to parse some kernel log you are at the correct place
         You can use system trace too
+        :param boot_time: machine's boot time (as Windows FILETIME) to be used as offset for the events' timestamp.
         """
 
     @abstractmethod
@@ -116,24 +119,25 @@ class EtlFile:
     The parse function will traverse all ETL chunks
     and call appropriate function depends on node type
     """
-    def __init__(self, header: Mof, chunks: List[Container]):
+    def __init__(self, header: EventTraceHeader | EventTrace_V0_Header, chunks: List[Container]):
         """
-        :param header System: This is the first chunk of ETL file, wich include some meta infos about file creation
+        :param header: This is the first chunk of ETL file, which include some meta infos about file creation
         :param chunks: List of all chunk (not all event)
         """
         self.header = header
         self.chunks = chunks
-
+        self.boot_time = header.source.BootTime
+        
     def parse(self, observer: IEtlFileObserver):
         """
         Parse the ETL file
         :param observer IEtlFileObserver: observer pattern
         """
         actions = {
-            "EventRecord": lambda obj: observer.on_event_record(Event(obj)),
+            "EventRecord": lambda obj: observer.on_event_record(Event(obj), boot_time=self.boot_time),
             "TraceRecord": lambda obj: observer.on_trace_record(Trace(obj)),
             "SystemTraceRecord": lambda obj: observer.on_system_trace(System(obj)),
-            "PerfInfoTraceRecord": lambda obj: observer.on_perfinfo_trace(PerfInfo(obj)),
+            "PerfInfoTraceRecord": lambda obj: observer.on_perfinfo_trace(PerfInfo(obj), boot_time=self.boot_time),
             "WinTraceRecord": lambda obj: observer.on_win_trace(WinTrace(obj))
         }
         for chunk in self.chunks:

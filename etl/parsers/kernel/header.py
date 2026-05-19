@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from construct import Struct, Int32ul, Int64ul, RepeatUntil, Byte
+from datetime import datetime, timedelta, timezone
 
 from etl.parsers.kernel.core import declare, Mof
 from etl.utils import TimeZoneInformation, WString
@@ -27,6 +28,7 @@ class EventTraceHeader(Mof):
         "CPUSpeed" / Int32ul,
         "LoggerName" / Int64ul,
         "LogFileName" / Int64ul,
+        "Padding" / Int32ul,
         "TimeZoneInformation" / TimeZoneInformation,
         "BootTime" / Int64ul,
         "PerfFreq" / Int64ul,
@@ -49,6 +51,23 @@ class EventTraceHeader(Mof):
         """
         return bytearray(self.source.LogFileNameString.string[:-2]).decode("utf-16le")
 
+    def get_boot_time(self) -> datetime:
+        """
+        :return: Return the time when the machine booted
+        """
+        return datetime(1601, 1, 1, tzinfo=timezone.utc) + timedelta(microseconds=self.source.BootTime / 10)
+
+    def get_start_time(self) -> datetime:
+        """
+        :return: Return the time when the trace started
+        """
+        return datetime(1601, 1, 1, tzinfo=timezone.utc) + timedelta(microseconds=self.source.StartTime / 10)
+
+    def get_end_time(self) -> datetime:
+        """
+        :return: Return the time when the trace ended
+        """
+        return datetime(1601, 1, 1, tzinfo=timezone.utc) + timedelta(microseconds=self.source.EndTime / 10)
 
 @declare(group=EventTraceGroup.EVENT_TRACE_GROUP_HEADER, version=2, event_types=[5, 32])
 class Header_Extension_TypeGroup(Mof):

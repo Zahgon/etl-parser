@@ -3,6 +3,7 @@
 Parse an event record
 :see: https://docs.microsoft.com/fr-fr/windows/desktop/api/evntcons/ns-evntcons-_event_record
 """
+from datetime import timedelta, datetime, timezone
 
 from construct import Struct, Int16ul, Enum, Int32ul, Int64ul, FlagsEnum, Int8ul, Bytes, Aligned, RepeatUntil, Computed, \
     AlignedStruct, If
@@ -103,11 +104,15 @@ class Event:
         """
         return self.source.event_header.thread_id
 
-    def get_timestamp(self) -> int:
+    def get_timestamp(self, boot_time: int) -> str:
         """
-        :return: Timestamp associated with this event
+        Return the ISO-formatted timestamp of the Event. The integer value stored in the Event structure is the number
+        of 100-nanosecond intervals since the last boot. This is why the machine's boot time is needed to calculate the
+        Event's actual timestamp.
+        :param: boot_time: the machine's boot time in FILETIME integer format
+        :return: ISO-formatted timestamp associated with this event.
         """
-        return self.source.event_header.timestamp
+        return (datetime(1601, 1, 1, tzinfo=timezone.utc) + timedelta(microseconds=(boot_time + self.source.event_header.timestamp)/10)).isoformat(timespec="microseconds")
 
     def parse_etw(self) -> Etw:
         """
