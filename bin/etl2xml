@@ -180,12 +180,12 @@ class EtlFileLogger(IEtlFileObserver):
         except (GroupNotFound, VersionNotFound, EventTypeNotFound) as e:
             print(e)
 
-    def on_perfinfo_trace(self, obj: PerfInfo, base_ts: int):
+    def on_perfinfo_trace(self, obj: PerfInfo, boot_time: int):
         try:
             mof = obj.get_mof()
             data = ElementTree.SubElement(self.xml_document, "event")
             data.set("type", "perfinfo")
-            data.set("timestamp", str(obj.get_timestamp(base_ts)))
+            data.set("timestamp", str(obj.get_timestamp(boot_time)))
             xml = ElementTree.SubElement(data, "mof")
             xml.set("provider", mof.__class__.__name__)
             log_kernel_type(mof, xml)
