@@ -44,7 +44,8 @@ TimeZoneInformation = Struct(
     "standard_bias" / Int32sl,
     "daylight_name" / Byte[64],
     "daylight_date" / SystemTime,
-    "daylight_bias" / Int32sl
+    "daylight_bias" / Int32sl,
+    "pad" / Byte[4]  # size must be aligned
 )
 
 PerfinfoGroupMask = Struct(

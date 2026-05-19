@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from construct import Struct, Int32ul, Int64ul, RepeatUntil, Byte
+from construct import Struct, Int32ul, Int64ul
 from datetime import datetime, timedelta, timezone
 
 from etl.parsers.kernel.core import declare, Mof
@@ -28,7 +28,6 @@ class EventTraceHeader(Mof):
         "CPUSpeed" / Int32ul,
         "LoggerName" / Int64ul,
         "LogFileName" / Int64ul,
-        "Padding" / Int32ul,
         "TimeZoneInformation" / TimeZoneInformation,
         "BootTime" / Int64ul,
         "PerfFreq" / Int64ul,
@@ -114,3 +113,4 @@ class EventTrace_V0_Header(Mof):
         "SessionNameString" / WString,
         "LogFileNameString" / WString
     )
+

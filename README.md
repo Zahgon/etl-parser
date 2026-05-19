@@ -26,8 +26,8 @@ etl2xml -i example.etl -o example.xml
 The second script, `etl2pcap` transforms network captures created through `netsh` into the `pcap` file format:
 
 ```
-netsh start trace capture=yes
-netsh stop trace
+netsh trace start capture=yes
+netsh trace stop 
 
 etl2pcap -i NetTrace.etl -o NetTrace.pcap
 ```
