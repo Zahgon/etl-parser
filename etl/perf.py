@@ -6,6 +6,7 @@ It use by kernel logger to send event but more concise than in system trace form
 But add timestamp of the event
 This an event driven log but without some of meta infos
 """
+from datetime import datetime, timezone, timedelta
 
 from construct import Struct, Enum, Int64ul, Bytes, Int8ul, Container
 
@@ -33,11 +34,18 @@ class PerfInfo:
     def __init__(self, source: Container):
         self.source = source
 
-    def get_timestamp(self) -> int:
+    def get_timestamp(self, boot_time: int) -> str:
         """
-        :return: Timestamp associated with this event
+        Return the ISO-formatted timestamp of the PerfInfo record. The integer value stored in the PerfInfo record
+        structure is the number of 100-nanosecond intervals since the last boot. This is why the machine's boot time is
+        needed to calculate the Event's actual timestamp.
+        :param: boot_time: the machine's boot time in FILETIME integer format
+        :return: ISO-formatted timestamp associated with this event.
         """
-        return self.source.timestamp
+        return (
+                datetime(1601, 1, 1, tzinfo=timezone.utc)
+                + timedelta(microseconds=(boot_time + self.source.event_header.timestamp)/10)
+        ).isoformat(timespec="microseconds")
 
     def get_mof(self) -> Mof:
         """

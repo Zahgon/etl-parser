@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+from datetime import datetime
 
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
@@ -10,10 +11,11 @@ from etl.error import GroupNotFound, VersionNotFound, EventTypeNotFound, EtwVers
     GuidNotFound, TlMetaDataNotFound, InvalidType
 from etl.etl import IEtlFileObserver, build_from_stream
 from etl.parsers.etw.core import Guid
+from etl.parsers.kernel.header import EventTrace_V0_Header
 from etl.wintrace import WinTrace
 from etl.event import Event
 from etl.parsers.kernel import FileIo_V2_Name, ImageLoad, DiskIo_TypeGroup1, \
-    Process_V3_TypeGroup1, Process_V4_TypeGroup1, Process_Defunct_TypeGroup1, ImageLoadProcess
+    Process_V3_TypeGroup1, Process_V4_TypeGroup1, Process_Defunct_TypeGroup1, ImageLoadProcess, EventTraceHeader
 from etl.parsers.kernel.core import Mof
 from etl.parsers.kernel.io import DiskIo_TypeGroup3
 from etl.parsers.tracelogging import TraceLogging
@@ -152,8 +154,16 @@ class EtlFileLogger(IEtlFileObserver):
     """
     This a basic observer that log event
     """
-    def __init__(self):
+    def __init__(self, header: EventTraceHeader | EventTrace_V0_Header):
         self.xml_document = ElementTree.Element("etl")
+        self.xml_document.set("SessionName", header.get_session_name())
+        self.xml_document.set("LogFileName", header.get_log_filename())
+        self.xml_document.set("BootTime", header.get_boot_time().isoformat())
+        self.xml_document.set("TraceStartTime", header.get_start_time().isoformat())
+        self.xml_document.set("TraceEndTime", header.get_end_time().isoformat())
+        self.xml_document.set("TimezoneStandardBias", str(header.source.TimeZoneInformation.standard_bias))
+        self.xml_document.set("TimezoneDaylightBias", str(header.source.TimeZoneInformation.daylight_bias))
+        self.xml_document.set("LostEvents", str(header.source.EventsLost))
 
     def on_system_trace(self, obj: SystemTraceRecord):
         try:
@@ -170,12 +180,12 @@ class EtlFileLogger(IEtlFileObserver):
         except (GroupNotFound, VersionNotFound, EventTypeNotFound) as e:
             print(e)
 
-    def on_perfinfo_trace(self, obj: PerfInfo):
+    def on_perfinfo_trace(self, obj: PerfInfo, boot_time: int):
         try:
             mof = obj.get_mof()
             data = ElementTree.SubElement(self.xml_document, "event")
             data.set("type", "perfinfo")
-            data.set("timestamp", str(obj.get_timestamp()))
+            data.set("timestamp", str(obj.get_timestamp(boot_time)))
             xml = ElementTree.SubElement(data, "mof")
             xml.set("provider", mof.__class__.__name__)
             log_kernel_type(mof, xml)
@@ -186,11 +196,11 @@ class EtlFileLogger(IEtlFileObserver):
     def on_trace_record(self, event: Trace):
         pass
 
-    def on_event_record(self, event: Event):
+    def on_event_record(self, event: Event, boot_time: int):
         try:
             data = ElementTree.Element("event")
             data.set("type", "event")
-            data.set("timestamp", str(event.get_timestamp()))
+            data.set("timestamp", event.get_timestamp(boot_time))
             data.set("PID", str(event.get_process_id()))
             data.set("TID", str(event.get_thread_id()))
             data.append(log_tracelogging(event.parse_tracelogging()))
@@ -200,7 +210,7 @@ class EtlFileLogger(IEtlFileObserver):
                 etw = event.parse_etw()
                 data = ElementTree.SubElement(self.xml_document, "event")
                 data.set("type", "event")
-                data.set("timestamp", str(event.get_timestamp()))
+                data.set("timestamp", event.get_timestamp(boot_time))
                 data.set("PID", str(event.get_process_id()))
                 data.set("TID", str(event.get_thread_id()))
                 xml = ElementTree.SubElement(data, "etw")
@@ -227,9 +237,9 @@ def main(input: str, output: str):
     :param input: input file path
     :param output: output path
     """
-    logger = EtlFileLogger()
     with open(input, "rb") as input_file:
         etl_reader = build_from_stream(input_file.read())
+        logger = EtlFileLogger(etl_reader.header)
         etl_reader.parse(logger)
 
     with open(output, "wb") as output_file:
