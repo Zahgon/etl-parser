@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Microsoft-Windows-PackageStateRoaming
-GUID : 5b5ab841-7d2e-4a95-bb4f-095cdf66d8f0
-"""
 from construct import Int8sl, Int8ul, Int16ul, Int16sl, Int32sl, Int32ul, Int64sl, Int64ul, Bytes, Double, Float32l, Struct
 from etl.utils import WString, CString, SystemTime, Guid
 from etl.dtyp import Sid

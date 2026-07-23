@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Microsoft-Windows-SmartCard-TPM-VCard-Module
-GUID : 125f2cf1-2768-4d33-976e-527137d080f8
-"""
 from construct import Int8sl, Int8ul, Int16ul, Int16sl, Int32sl, Int32ul, Int64sl, Int64ul, Bytes, Double, Float32l, Struct
 from etl.utils import WString, CString, SystemTime, Guid
 from etl.dtyp import Sid

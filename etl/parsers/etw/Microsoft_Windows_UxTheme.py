@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Microsoft-Windows-UxTheme
-GUID : 422088e6-cd0c-4f99-bd0b-6985fa290bdf
-"""
 from construct import Int8sl, Int8ul, Int16ul, Int16sl, Int32sl, Int32ul, Int64sl, Int64ul, Bytes, Double, Float32l, Struct
 from etl.utils import WString, CString, SystemTime, Guid
 from etl.dtyp import Sid

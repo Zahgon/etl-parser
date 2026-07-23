@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Microsoft-Windows-SetupCl
-GUID : 75ebc33e-d017-4d0f-93ab-0b4f86579164
-"""
 from construct import Int8sl, Int8ul, Int16ul, Int16sl, Int32sl, Int32ul, Int64sl, Int64ul, Bytes, Double, Float32l, Struct
 from etl.utils import WString, CString, SystemTime, Guid
 from etl.dtyp import Sid

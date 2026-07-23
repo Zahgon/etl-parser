@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-Trace logging API is a DEV API offer by microsoft to exploit ETW without
-all stuff around manifest, and include the message scheme directly into event.
-
-It's a beautiful C Macro based API
-"""
 
 import struct
 from enum import Enum
@@ -89,13 +83,11 @@ def read_field(stream, tag):
         current = []
         while len(current) == 0 or current[-1] != b"\x00\x00":
             current.append(stream.read_exact(2))
-        # Encode in utf16 and ignore last null byte
         return b"".join(current).decode("utf-16le")[:-1]
     elif tag & 0x1f == TagIn.ANSISTRING.value:
         current = []
         while len(current) == 0 or current[-1] != b"\x00":
             current.append(stream.read_exact(1))
-        # Encode in ascii and ignore last null byte
         return b"".join(current).decode("ascii")[:-1]
 
     elif tag & 0x1f == TagIn.COUNTEDANSISTRING.value:
@@ -161,12 +153,6 @@ class BytesIORaise(BytesIO):
 
 
 class TraceLogging(dict):
-    """
-    This class is a TraceLogging parser
-    It may be partial because TraceLogging format
-    is not documented
-    It's work like a dict
-    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.scheme = None
@@ -188,8 +174,4 @@ class TraceLogging(dict):
         return self
 
     def get_name(self):
-        """
-        Name of the tracelogging provider
-        :return: name of the tracelogging provider
-        """
-        return self.scheme.name
+        pass

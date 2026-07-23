@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Microsoft-Windows-CoreSystem-InitMachineConfig
-GUID : 0b886108-1899-4d3a-9c0d-42d8fc4b9108
-"""
 from construct import Int8sl, Int8ul, Int16ul, Int16sl, Int32sl, Int32ul, Int64sl, Int64ul, Bytes, Double, Float32l, Struct
 from etl.utils import WString, CString, SystemTime, Guid
 from etl.dtyp import Sid

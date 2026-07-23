@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Parse an event trace record
-:see: https://www.geoffchappell.com/studies/windows/km/ntoskrnl/api/etw/tracelog/event_trace_header.htm
-
-Actually there is no infos about this logs. It seems to come from kernel.
-"""
 
 from construct import Struct, Int16ul, Enum, Int32ul, Int64ul, Int8ul, Bytes, Computed, AlignedStruct, Container
 from etl.utils import Guid
@@ -56,9 +50,6 @@ TraceRecord = AlignedStruct(8,
 
 
 class Trace:
-    """
-    This is a python wrapper around construct struct to access interesting fields
-    """
     def __init__(self, source: Container):
         """
         :param source Container: The EventTraceRecord Container once it's parsed
@@ -66,16 +57,8 @@ class Trace:
         self.source = source
 
     def get_process_id(self) -> int:
-        """
-        Return the process id of issuer
-        :return: process id of issuer
-        """
-        return self.source.event_header.process_id
+        pass
 
     def get_thread_id(self) -> int:
-        """
-        Return the thread id of issuer
-        :return: thread id of issuer
-        """
-        return self.source.event_header.thread_id
+        pass
 

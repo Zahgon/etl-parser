@@ -7,13 +7,6 @@ from etl.wmi import EventTraceGroup
 
 @declare(group=EventTraceGroup.EVENT_TRACE_GROUP_THREAD, version=2, event_types=[1, 2, 3, 4])
 class Thread_V2_TypeGroup1(Mof):
-    """
-    Thread Create/Exit Event
-    1: Start
-    2: End
-    3: DCStart
-    4: DCEnd
-    """
     pattern = Struct(
         "ProcessId" / Int32ul,
         "ThreadId" / Int32ul,
@@ -28,33 +21,17 @@ class Thread_V2_TypeGroup1(Mof):
     )
 
     def get_process_id(self) -> int:
-        """
-        :return: Associate Process id
-        """
-        return self.source.ProcessId
+        pass
 
     def get_thread_id(self) -> int:
-        """
-        :return: Thread id
-        """
-        return self.source.ThreadId
+        pass
 
     def get_subprocess_tag(self) -> int:
-        """
-        :return: Use in service start
-        """
-        return self.source.SubProcessTag
+        pass
 
 
 @declare(group=EventTraceGroup.EVENT_TRACE_GROUP_THREAD, version=3, event_types=[1, 2, 3, 4])
 class Thread_TypeGroup1(Mof):
-    """
-    Thread Create/Exit Event
-    1: Start
-    2: End
-    3: DCStart
-    4: DCEnd
-    """
     pattern = Struct(
         "ProcessId" / Int32ul,
         "ThreadId" / Int32ul,
@@ -73,33 +50,18 @@ class Thread_TypeGroup1(Mof):
     )
 
     def get_process_id(self) -> int:
-        """
-        :return: Associate Process id
-        """
-        return self.source.ProcessId
+        pass
 
     def get_thread_id(self) -> int:
-        """
-        :return: Thread id
-        """
-        return self.source.ThreadId
+        pass
 
     def get_subprocess_tag(self) -> int:
-        """
-        :return: Use in service start
-        """
-        return self.source.SubProcessTag
+        pass
 
     def get_thread_flags(self) -> int:
-        """
-        :return: Thread creation flags
-        """
-        return self.source.ThreadFlags
+        pass
 
 
 @declare(group=EventTraceGroup.EVENT_TRACE_GROUP_THREAD, version=2, event_types=[37])
 class CompCS(Mof):
-    """
-    Empty log
-    """
     pattern = Struct()

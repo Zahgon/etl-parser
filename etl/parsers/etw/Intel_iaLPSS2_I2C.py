@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Intel-iaLPSS2-I2C
-GUID : c2f86198-03ca-4771-8d4c-ce6e15cbca56
-"""
 from construct import Int8sl, Int8ul, Int16ul, Int16sl, Int32sl, Int32ul, Int64sl, Int64ul, Bytes, Double, Float32l, Struct
 from etl.utils import WString, CString, SystemTime, Guid
 from etl.dtyp import Sid

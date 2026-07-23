@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Parse an event record
-:see: https://docs.microsoft.com/fr-fr/windows/desktop/api/evntcons/ns-evntcons-_event_record
-"""
 from datetime import timedelta, datetime, timezone
 
 from construct import Struct, Int16ul, Enum, Int32ul, Int64ul, FlagsEnum, Int8ul, Bytes, Aligned, RepeatUntil, Computed, \
@@ -84,54 +80,20 @@ EventRecord = AlignedStruct(8,
 
 
 class Event:
-    """
-    This is a python wrapper around construct struct to access interesting fields
-    """
     def __init__(self, source):
         self.source = source
 
     def get_process_id(self):
-        """
-        Return the process id of issuer
-        :return: process id of issuer
-        """
-        return self.source.event_header.process_id
+        pass
 
     def get_thread_id(self):
-        """
-        Return the thread id of issuer
-        :return: thread id of issuer
-        """
-        return self.source.event_header.thread_id
+        pass
 
     def get_timestamp(self, boot_time: int) -> str:
-        """
-        Return the ISO-formatted timestamp of the Event. The integer value stored in the Event structure is the number
-        of 100-nanosecond intervals since the last boot. This is why the machine's boot time is needed to calculate the
-        Event's actual timestamp.
-        :param: boot_time: the machine's boot time in FILETIME integer format
-        :return: ISO-formatted timestamp associated with this event.
-        """
-        return (
-            datetime(1601, 1, 1, tzinfo=timezone.utc) 
-                + timedelta(microseconds=(boot_time + self.source.event_header.timestamp)/10)
-        ).isoformat(timespec="microseconds")
+        pass
 
     def parse_etw(self) -> Etw:
-        """
-        Try to parse user data with known etw format (if it's an ETW log)
-        :return: If known build associate Etw class
-        :raise: GuidNotFound, EventIdNotFound, EtwVersionNotFound
-        """
-        guid = EtwGuid(self.source.event_header.provider_id.inner.data1, self.source.event_header.provider_id.inner.data2,
-                    self.source.event_header.provider_id.inner.data3, self.source.event_header.provider_id.inner.data4)
-        event_id = self.source.event_header.event_descriptor.Id
-        version = self.source.event_header.event_descriptor.Version
-        user_data = self.source.user_data
-        return build_etw(guid, event_id, version, user_data)
+        pass
 
     def parse_tracelogging(self) -> TraceLogging:
-        """
-        Try to parse a tracelogging event
-        """
-        return build_tracelogging(self.source)
+        pass

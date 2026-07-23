@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-This is wmi trace header declaration
-
-WMI Headers are a subset of system trace header
-"""
 
 from construct import Enum, Int32ul, Struct, Int16ul, Int64ul, Int8ul, Bytes, \
     Const, FlagsEnum, Int32sl, BitStruct, BitsInteger

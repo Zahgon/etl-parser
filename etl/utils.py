@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-Utils encompass a lot of well known structure definition
-Which can be found in many other type definition
-"""
 
 from construct import Struct, Int32sl, Int16sl, Byte, Enum, Check, EnumInteger, Int16ul, Int32ul, RepeatUntil, Computed
 

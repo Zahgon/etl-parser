@@ -1,18 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-System header for all WMI trace messages
-
-see: https://www.geoffchappell.com/studies/windows/km/ntoskrnl/api/etw/tracelog/system_trace_header.htm?tx=25
-
-Parse the system trace header
-:see: https://www.geoffchappell.com/studies/windows/km/ntoskrnl/api/etw/tracelog/trace_logfile_header.htm
-
-This message is always present in the first chunk of every ETL file
-
-It often use as a mof data container for the kernel logger
-It have a lot of metadata (ProcessID ThreadID etc...) in compare to Perf message
-"""
 from construct import Struct, Computed, Int32ul, Int64ul, If, LazyBound, Bytes, Enum, Int8ul, Container
 
 from etl.parsers.kernel.core import Mof, build_mof
@@ -49,9 +36,6 @@ SystemTraceRecord = Struct(
 
 
 class System:
-    """
-    A System log from Windows Kernel
-    """
     def __init__(self, source: Container):
         """
         :param source: SystemTrace
@@ -59,21 +43,10 @@ class System:
         self.source = source
 
     def get_process_id(self) -> int:
-        """
-        :return: Source Process Id of the event
-        """
-        return self.source.system_header.process_id
+        pass
 
     def get_thread_id(self) -> int:
-        """
-        :return: Source thread id of the event
-        """
-        return self.source.system_header.thread_id
+        pass
 
     def get_mof(self) -> Mof:
-        """
-        This function try to build mof structure for SystemInfo container
-        MOF structure is a common way to send infos from kernel
-        :return: Mof structure
-        """
-        return build_mof(self.source.system_header.header.group, self.source.system_header.marker.version, self.source.system_header.header.type, self.source.mof_data)
+        pass

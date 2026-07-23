@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Error Instrument
-GUID : cd7cf0d0-02cc-4872-9b65-0dba0a90efe8
-"""
 from construct import Int8sl, Int8ul, Int16ul, Int16sl, Int32sl, Int32ul, Int64sl, Int64ul, Bytes, Double, Float32l, Struct
 from etl.utils import WString, CString, SystemTime, Guid
 from etl.dtyp import Sid

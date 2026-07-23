@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-TeeDriver
-GUID : e1da8995-85bc-452b-b62b-0913306a430e
-"""
 from construct import Int8sl, Int8ul, Int16ul, Int16sl, Int32sl, Int32ul, Int64sl, Int64ul, Bytes, Double, Float32l, Struct
 from etl.utils import WString, CString, SystemTime, Guid
 from etl.dtyp import Sid

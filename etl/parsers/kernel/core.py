@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-:see: https://github.com/tpn/winsdk-10/blob/master/Include/10.0.10240.0/km/wmicore.mof
-"""
 from abc import ABCMeta
 from typing import List, Container
 
@@ -26,26 +23,14 @@ def declare(*, group: Enum, version: int, event_types: List[int]) -> callable:
     :return: cls
     """
     def wrapper(cls):
-        for event_type in event_types:
-            if group not in __mof_factory__.keys():
-                __mof_factory__[group] = {}
-            if version not in __mof_factory__[group].keys():
-                __mof_factory__[group][version] = {}
-
-            __mof_factory__[group][version][event_type] = cls
-        return cls
+        pass
     return wrapper
 
 
 class Mof(metaclass=ABCMeta):
-    """
-    Top class for inheritance purpose
-    """
 
-    # Use construct pattern to parse mof data
     pattern = None
 
-    # Event type handled
     event_types = {
         0: "Name",
         1: "Start",
@@ -77,10 +62,7 @@ class Mof(metaclass=ABCMeta):
         return self.pattern.parse(mof_data)
 
     def get_event_definition(self):
-        """
-        :return: name of event definition
-        """
-        return self.event_types[self.event_type]
+        pass
 
 
 def build_mof(group: Enum, version: int, event_type: int, mof_data: bytes) -> Mof:

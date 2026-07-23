@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Microsoft-Windows-RemoteDesktopServices-RemoteFX-VM-Kernel-Mode-Transport
-GUID : 7eb5f4cf-a4f6-4e92-aa8f-a8e7ef937745
-"""
 from construct import Int8sl, Int8ul, Int16ul, Int16sl, Int32sl, Int32ul, Int64sl, Int64ul, Bytes, Double, Float32l, Struct
 from etl.utils import WString, CString, SystemTime, Guid
 from etl.dtyp import Sid

@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Intel-iaLPSS2-GPIO2
-GUID : 63848cff-3ec7-4ddf-8072-5f95e8c8eb98
-"""
 from construct import Int8sl, Int8ul, Int16ul, Int16sl, Int32sl, Int32ul, Int64sl, Int64ul, Bytes, Double, Float32l, Struct
 from etl.utils import WString, CString, SystemTime, Guid
 from etl.dtyp import Sid

@@ -9,9 +9,6 @@ from etl.wmi import EventTraceGroup
 
 @declare(group=EventTraceGroup.EVENT_TRACE_GROUP_HEADER, version=2, event_types=[0])
 class EventTraceHeader(Mof):
-    """
-    This the first event for an ETL file with all meta infos
-    """
     pattern = Struct(
         "BufferSize" / Int32ul,
         "Version" / Int32ul,
@@ -39,40 +36,22 @@ class EventTraceHeader(Mof):
     )
 
     def get_session_name(self) -> str:
-        """
-        :return: ETW Session name
-        """
-        return bytearray(self.source.SessionNameString.string[:-2]).decode("utf-16le")
+        pass
 
     def get_log_filename(self) -> str:
-        """
-        :return: Return path of log file name
-        """
-        return bytearray(self.source.LogFileNameString.string[:-2]).decode("utf-16le")
+        pass
 
     def get_boot_time(self) -> datetime:
-        """
-        :return: Return the time when the machine booted
-        """
-        return datetime(1601, 1, 1, tzinfo=timezone.utc) + timedelta(microseconds=self.source.BootTime / 10)
+        pass
 
     def get_start_time(self) -> datetime:
-        """
-        :return: Return the time when the trace started
-        """
-        return datetime(1601, 1, 1, tzinfo=timezone.utc) + timedelta(microseconds=self.source.StartTime / 10)
+        pass
 
     def get_end_time(self) -> datetime:
-        """
-        :return: Return the time when the trace ended
-        """
-        return datetime(1601, 1, 1, tzinfo=timezone.utc) + timedelta(microseconds=self.source.EndTime / 10)
+        pass
 
 @declare(group=EventTraceGroup.EVENT_TRACE_GROUP_HEADER, version=2, event_types=[5, 32])
 class Header_Extension_TypeGroup(Mof):
-    """
-    Event Trace Header Extension
-    """
     pattern = Struct(
         "GroupMask1" / Int32ul,
         "GroupMask2" / Int32ul,

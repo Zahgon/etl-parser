@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-This file parse ETL file
-It's directly inspired from :
-:see: https://www.geoffchappell.com/studies/windows/km/ntoskrnl/api/etw/tracelog/wmi_buffer_header.htm
-"""
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
 from typing import List, Any
@@ -27,11 +22,8 @@ EtlChunk = Struct(
 )
 
 
-# An ETL file is structured by ETL chunks until the end
 EtlLogFile = GreedyRange(EtlChunk)
 
-# This is a common way to select any type of chunks
-# We add name selecting as computed to handle typing during parsing
 Chunk = Aligned(8,
     Select(
         Struct(
@@ -61,10 +53,6 @@ ChunkParser = RepeatUntil(lambda x, lst, ctx: len(x._io.getbuffer()) == x._io.te
 
 
 class IEtlFileObserver(metaclass=ABCMeta):
-    """
-    This is etl file observer
-    Parse sequentially an etl file and commit event when found a particular event
-    """
     @abstractmethod
     def on_event_record(self, event: Event, boot_time: int):
         """
@@ -114,11 +102,6 @@ class IEtlFileObserver(metaclass=ABCMeta):
 
 
 class EtlFile:
-    """
-    This is the main class for reading an ETL file
-    The parse function will traverse all ETL chunks
-    and call appropriate function depends on node type
-    """
     def __init__(self, header: EventTraceHeader | EventTrace_V0_Header, chunks: List[Container]):
         """
         :param header: This is the first chunk of ETL file, which include some meta infos about file creation
@@ -145,28 +128,8 @@ class EtlFile:
                 actions[event.type](event.value)
 
     def get_header(self) -> Mof:
-        """
-        :return: the event trace header
-        """
-        return self.header
+        pass
 
 
 def build_from_stream(stream: bytes) -> EtlFile:
-    """
-    Parse ETL file format stream
-    :param stream: a bytes like object that encompass raw data
-    :return: EtlFile object
-    """
-    chunks = EtlLogFile.parse(stream)
-    # first chunk must be Wmi Log Type header
-    try:
-        event_header_chunk = ChunkParser.parse(chunks[0].payload)
-        if event_header_chunk[0].type != "SystemTraceRecord":
-            raise InvalidEtlFileHeader()
-        mof = System(event_header_chunk[0].value).get_mof()
-        if not (isinstance(mof, EventTraceHeader) or isinstance(mof, EventTrace_V0_Header)):
-            raise InvalidEtlFileHeader()
-    except CheckError as e:
-        raise InvalidEtlFileHeader() from e
-
-    return EtlFile(mof, chunks[1:])
+    pass

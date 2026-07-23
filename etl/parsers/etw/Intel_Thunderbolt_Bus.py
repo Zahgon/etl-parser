@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Intel-Thunderbolt-Bus
-GUID : 88ef8329-295d-4d79-ac09-38f9610a40c9
-"""
 from construct import Int8sl, Int8ul, Int16ul, Int16sl, Int32sl, Int32ul, Int64sl, Int64ul, Bytes, Double, Float32l, Struct
 from etl.utils import WString, CString, SystemTime, Guid
 from etl.dtyp import Sid

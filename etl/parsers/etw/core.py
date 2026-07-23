@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-Handle ETW parser logic
-"""
 from abc import ABCMeta
 from typing import List
 
@@ -13,9 +10,6 @@ __etw_factory__ = {}
 
 
 class Guid:
-    """
-    Guid class for ETW def and management
-    """
     def __init__(self, data1: int, data2: int, data3: int, data4: List[int]):
         self.data1 = data1
         self.data2 = data2
@@ -29,8 +23,6 @@ class Guid:
         return (self.data1, self.data2, self.data3, self.data4) == (other.data1, other.data2, other.data3, other.data4)
 
     def __ne__(self, other):
-        # Not strictly necessary, but to avoid having both x==y and x!=y
-        # True at the same time
         return not (self == other)
 
     def __str__(self):
@@ -56,21 +48,12 @@ def declare(*, guid: Guid, event_id: int, version: int) -> callable:
     :return: cls
     """
     def wrapper(cls):
-        if guid not in __etw_factory__.keys():
-            __etw_factory__[guid] = {}
-        if event_id not in __etw_factory__[guid].keys():
-            __etw_factory__[guid][event_id] = {}
-        __etw_factory__[guid][event_id][version] = cls
-        return cls
+        pass
     return wrapper
 
 
 class Etw(metaclass=ABCMeta):
-    """
-    Base class for all ETW event
-    """
 
-    # Use construct pattern to parse event user data
     pattern = None
 
     def __init__(self, user_data):

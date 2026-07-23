@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-This event have no public information
-We reverse the format, and appears to encompass ETW
-"""
 from construct import Struct, Int16ul, Const, Int32ul, AlignedStruct, Computed, Bytes, Container
 
 from etl.parsers.etw.core import Etw, build_etw, Guid as EtwGuid
@@ -27,9 +23,6 @@ WinTraceRecord = AlignedStruct(8,
 
 
 class WinTrace:
-    """
-    This is a python wrapper around construct struct to access interesting fields
-    """
 
     def __init__(self, source: Container):
         """
@@ -38,28 +31,10 @@ class WinTrace:
         self.source = source
 
     def get_process_id(self) -> int:
-        """
-        Return the process id of issuer
-        :return: process id of issuer
-        """
-        return self.source.event_header.process_id
+        pass
 
     def get_thread_id(self) -> int:
-        """
-        Return the thread id of issuer
-        :return: thread id of issuer
-        """
-        return self.source.event_header.thread_id
+        pass
 
     def parse_etw(self) -> Etw:
-        """
-        Try to parse user data with known etw format (if it's an ETW log)
-        :return: If known build associate Etw class
-        :raise: GuidNotFound, EventIdNotFound, EtwVersionNotFound
-        """
-        guid = EtwGuid(self.source.event_header.provider_id.inner.data1, self.source.event_header.provider_id.inner.data2,
-                    self.source.event_header.provider_id.inner.data3, self.source.event_header.provider_id.inner.data4)
-        event_id = self.source.event_header.event_id
-        version = 0 # this kind of event have no associated version
-        user_data = self.source.user_data
-        return build_etw(guid, event_id, version, user_data)
+        pass

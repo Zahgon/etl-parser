@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Intel-SST-BUS
-GUID : b28427d2-a745-43ba-8aec-ffe3b94f97d3
-"""
 from construct import Int8sl, Int8ul, Int16ul, Int16sl, Int32sl, Int32ul, Int64sl, Int64ul, Bytes, Double, Float32l, Struct
 from etl.utils import WString, CString, SystemTime, Guid
 from etl.dtyp import Sid
